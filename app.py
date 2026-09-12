@@ -53,7 +53,7 @@ def gioca_carta():
 if __name__ == "__main__":
   app.run()
         
-    return jsonify(partita.to_dict())
+  return jsonify(partita.to_dict())
 
 if __name__ == "__main__":
     app.run()
