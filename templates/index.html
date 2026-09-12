@@ -1,13 +1,49 @@
-html_content = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gioco di Carte - Briscola</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: radial-gradient(circle, #1a472a 0%, #0d2818 100%); color: #f0f4f1; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        .game-container { width: 100vw; height: 100vh; max-width: 1200px; display: flex; flex-direction: column; padding: 15px; }
+        .game-header { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.4); padding: 10px 25px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .game-header h1 { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #dfb15b; letter-spacing: 2px; }
+        .info-badge { background: rgba(255, 255, 255, 0.1); padding: 6px 14px; border-radius: 20px; font-size: 0.95rem; }
+        .info-badge .valore { font-weight: bold; color: #dfb15b; margin-left: 5px; }
+        .tavolo { flex: 1; display: flex; flex-direction: column; justify-content: space-between; margin-top: 15px; position: relative; }
+        .area-giocatore { display: flex; flex-direction: column; align-items: center; padding: 10px; }
+        .player-info { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .player-info h3 { font-family: 'Cinzel', serif; font-size: 1.1rem; }
+        .status-badge { font-size: 0.75rem; padding: 3px 8px; border-radius: 10px; background: rgba(255, 255, 255, 0.15); }
+        .status-badge.attivo { background: #2e7d32; color: #fff; }
+        .mano-carte { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; min-height: 110px; }
+        .carta { width: 75px; height: 115px; background: #fdfbf7; color: #2c2c2c; border-radius: 8px; border: 2px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; justify-content: space-between; padding: 6px; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; user-select: none; position: relative; }
+        .carta:hover { transform: translateY(-10px) scale(1.05); box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); border-color: #dfb15b; }
+        .carta.selezionata { transform: translateY(-15px); border: 3px solid #dfb15b; box-shadow: 0 0 12px #dfb15b; }
+        .carta .valore-carta { font-weight: bold; font-size: 0.85rem; }
+        .carta .seme-carta { font-size: 1.2rem; align-self: center; }
+        .area-centrale { display: flex; align-items: center; justify-content: space-around; background: rgba(0, 0, 0, 0.2); border-radius: 20px; padding: 15px; margin: 10px 0; }
+        .carta-mazzo { width: 70px; height: 105px; background: linear-gradient(135deg, #2b3a42 0%, #17242b 100%); border: 2px solid #dfb15b; border-radius: 8px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #dfb15b; font-weight: bold; }
+        .campo-gioco { display: flex; align-items: center; gap: 20px; }
+        .slot-carta { width: 80px; height: 120px; border: 2px dashed rgba(255, 255, 255, 0.3); border-radius: 8px; display: flex; justify-content: center; align-items: center; }
+        .placeholder-text { font-size: 0.75rem; color: rgba(255, 255, 255, 0.4); }
+        .vs-badge { font-family: 'Cinzel', serif; font-weight: 800; font-size: 1.2rem; color: #dfb15b; }
+        .btn-azione { background: linear-gradient(180deg, #dfb15b 0%, #b8860b 100%); color: #1a1a1a; border: none; padding: 12px 24px; font-size: 1rem; font-weight: bold; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); transition: transform 0.1s ease; }
+        .btn-azione:hover:not(:disabled) { transform: scale(1.05); }
+        .btn-azione:disabled { opacity: 0.5; cursor: not-allowed; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 100; }
+        .modal.hidden { display: none; }
+        .modal-content { background: #1e3a29; padding: 30px; border-radius: 16px; border: 2px solid #dfb15b; text-align: center; max-width: 400px; width: 90%; }
+        .modal-content h2 { font-family: 'Cinzel', serif; color: #dfb15b; margin-bottom: 15px; }
+        .semi-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+        .btn-seme { padding: 12px; font-size: 1.1rem; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; background: #2e543c; color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-seme:hover { background: #dfb15b; color: #1a1a1a; }
+    </style>
 </head>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 <body>
 
     <!-- Overlay per Scelta Briscola -->
@@ -16,10 +52,10 @@ html_content = """<!DOCTYPE html>
             <h2>Scegli il Seme di Briscola</h2>
             <p>Seleziona il seme dominante per questa partita:</p>
             <div class="semi-buttons">
-                <button onclick="scegliBriscola('Denari')" class="btn-seme denari">♦ Denari</button>
-                <button onclick="scegliBriscola('Coppe')" class="btn-seme coppe">🍷 Coppe</button>
-                <button onclick="scegliBriscola('Spade')" class="btn-seme spade">⚔ Spade</button>
-                <button onclick="scegliBriscola('Bastoni')" class="btn-seme bastoni">🪵 Bastoni</button>
+                <button onclick="scegliBriscola('Denari')" class="btn-seme">♦ Denari</button>
+                <button onclick="scegliBriscola('Coppe')" class="btn-seme">🍷 Coppe</button>
+                <button onclick="scegliBriscola('Spade')" class="btn-seme">⚔ Spade</button>
+                <button onclick="scegliBriscola('Bastoni')" class="btn-seme">🪵 Bastoni</button>
             </div>
         </div>
     </div>
@@ -27,15 +63,13 @@ html_content = """<!DOCTYPE html>
     <!-- Modal Fine Partita -->
     <div id="modal-fine" class="modal hidden">
         <div class="modal-content">
-            <h2 id="esito-titolo">Partita Terminata!</h2>
-            <div id="esito-punteggio" class="punteggio-box"></div>
-            <button onclick="nuovaPartita()" class="btn-azione">Gioca un'altra partita</button>
+            <h2>Partita Terminata!</h2>
+            <div id="esito-punteggio"></div>
+            <button onclick="location.reload()" class="btn-azione" style="margin-top: 15px;">Gioca un'altra partita</button>
         </div>
     </div>
 
     <div class="game-container">
-        
-        <!-- Header con Informazioni di Gioco -->
         <header class="game-header">
             <div class="info-badge">
                 <span class="label">Briscola:</span>
@@ -48,21 +82,15 @@ html_content = """<!DOCTYPE html>
             </div>
         </header>
 
-        <!-- Tavolo da Gioco principali -->
         <main class="tavolo">
-            
-            <!-- Zona Giocatore 2 (In Alto) -->
             <section class="area-giocatore top">
                 <div class="player-info">
                     <h3>Giocatore 2</h3>
-                    <span id="status-g2" class="status-badge">In attesa...</span>
+                    <span class="status-badge">In attesa...</span>
                 </div>
-                <div id="mano-g2" class="mano-carte carte-coperte">
-                    <!-- Le carte del G2 verranno inserite qui -->
-                </div>
+                <div id="mano-g2" class="mano-carte"></div>
             </section>
 
-            <!-- Centro Tavolo / Campo di Battaglia -->
             <section class="area-centrale">
                 <div class="mazzo-container">
                     <div class="carta-mazzo">
@@ -72,13 +100,9 @@ html_content = """<!DOCTYPE html>
                 </div>
 
                 <div class="campo-gioco">
-                    <div class="slot-carta" id="slot-g1">
-                        <span class="placeholder-text">Carta G1</span>
-                    </div>
+                    <div class="slot-carta" id="slot-g1"><span class="placeholder-text">Carta G1</span></div>
                     <div class="vs-badge">VS</div>
-                    <div class="slot-carta" id="slot-g2">
-                        <span class="placeholder-text">Carta G2</span>
-                    </div>
+                    <div class="slot-carta" id="slot-g2"><span class="placeholder-text">Carta G2</span></div>
                 </div>
 
                 <div class="pannello-azioni">
@@ -86,19 +110,150 @@ html_content = """<!DOCTYPE html>
                 </div>
             </section>
 
-            <!-- Zona Giocatore 1 (In Basso) -->
             <section class="area-giocatore bottom">
                 <div class="player-info">
                     <h3>Giocatore 1 (Tu)</h3>
-                    <span id="status-g1" class="status-badge attivo">Il tuo turno</span>
+                    <span class="status-badge attivo">Il tuo turno</span>
                 </div>
-                <div id="mano-g1" class="mano-carte">
-                    <!-- Le carte del G1 verranno inserite qui -->
-                </div>
+                <div id="mano-g1" class="mano-carte"></div>
             </section>
-
         </main>
     </div>
+
+    <script>
+        let cartaSelezionataG1 = null;
+        let cartaSelezionataG2 = null;
+        let statoAttuale = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            aggiornaStato();
+        });
+
+        async function aggiornaStato() {
+            try {
+                const response = await fetch('/api/stato');
+                statoAttuale = await response.json();
+                renderizzaGioco(statoAttuale);
+            } catch (err) {
+                console.error("Errore recupero stato:", err);
+            }
+        }
+
+        function renderizzaGioco(stato) {
+            const modalBriscola = document.getElementById('modal-briscola');
+            if (!stato.briscole) {
+                modalBriscola.classList.remove('hidden');
+            } else {
+                modalBriscola.classList.add('hidden');
+                document.getElementById('briscola-attuale').textContent = stato.briscole;
+            }
+
+            document.getElementById('turno-attuale').textContent = `Giocatore ${stato.prio}`;
+            document.getElementById('carte-rimaste').textContent = stato.carte_rimaste_mazzo;
+
+            const containerG1 = document.getElementById('mano-g1');
+            containerG1.innerHTML = '';
+            stato.mano_g1.forEach(cartaStr => {
+                const cardElem = creaElementoCarta(cartaStr, (c) => selezionaCarta(c, 1));
+                if (cartaSelezionataG1 === cartaStr) cardElem.classList.add('selezionata');
+                containerG1.appendChild(cardElem);
+            });
+
+            const containerG2 = document.getElementById('mano-g2');
+            containerG2.innerHTML = '';
+            stato.mano_g2.forEach(cartaStr => {
+                const cardElem = creaElementoCarta(cartaStr, (c) => selezionaCarta(c, 2));
+                if (cartaSelezionataG2 === cartaStr) cardElem.classList.add('selezionata');
+                containerG2.appendChild(cardElem);
+            });
+
+            document.getElementById('btn-conferma-turno').disabled = !(cartaSelezionataG1 && cartaSelezionataG2);
+
+            if (stato.fase === "FINITA") {
+                document.getElementById('modal-fine').classList.remove('hidden');
+            }
+        }
+
+        function creaElementoCarta(cartaStr, onClickHandler) {
+            const parts = cartaStr.split(' ');
+            const seme = parts[0];
+            const valore = parts[1];
+            const card = document.createElement('div');
+            card.className = 'carta';
+            card.onclick = () => onClickHandler(cartaStr);
+
+            const iconaSeme = { 'Denari': '♦', 'Coppe': '🍷', 'Spade': '⚔', 'Bastoni': '🪵' }[seme] || '';
+
+            card.innerHTML = `
+                <div class="valore-carta">${valore}</div>
+                <div class="seme-carta">${iconaSeme}</div>
+                <div class="valore-carta" style="align-self: flex-end;">${seme}</div>
+            `;
+            return card;
+        }
+
+        function selezionaCarta(cartaStr, giocatore) {
+            if (giocatore === 1) {
+                cartaSelezionataG1 = (cartaSelezionataG1 === cartaStr) ? null : cartaStr;
+            } else {
+                cartaSelezionataG2 = (cartaSelezionataG2 === cartaStr) ? null : cartaStr;
+            }
+            renderizzaGioco(statoAttuale);
+        }
+
+        async function scegliBriscola(seme) {
+            try {
+                const res = await fetch('/api/scegli-briscola', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ seme: seme })
+                });
+                statoAttuale = await res.json();
+                renderizzaGioco(statoAttuale);
+            } catch (err) {
+                console.error("Errore scelta briscola:", err);
+            }
+        }
+
+        async function inviaGiocata() {
+            if (!cartaSelezionataG1 || !cartaSelezionataG2) return;
+
+            try {
+                const res = await fetch('/api/gioca-turno', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        carta1: cartaSelezionataG1,
+                        carta2: cartaSelezionataG2
+                    })
+                });
+
+                const risp = await res.json();
+
+                document.getElementById('slot-g1').innerHTML = '';
+                document.getElementById('slot-g1').appendChild(creaElementoCarta(cartaSelezionataG1, ()=>{}));
+                
+                document.getElementById('slot-g2').innerHTML = '';
+                document.getElementById('slot-g2').appendChild(creaElementoCarta(cartaSelezionataG2, ()=>{}));
+
+                cartaSelezionataG1 = null;
+                cartaSelezionataG2 = null;
+
+                if (risp.punti_g1 !== undefined) {
+                    const modalFine = document.getElementById('modal-fine');
+                    document.getElementById('esito-punteggio').innerHTML = `<p>G1: ${risp.punti_g1} punti</p><p>G2: ${risp.punti_g2} punti</p>`;
+                    modalFine.classList.remove('hidden');
+                } else {
+                    statoAttuale = risp;
+                    renderizzaGioco(statoAttuale);
+                }
+            } catch (err) {
+                console.error("Errore giocata:", err);
+            }
+        }
+    </script>
+</body>
+</html>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
