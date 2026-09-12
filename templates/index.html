@@ -12,50 +12,42 @@
         
         .game-container { width: 100vw; height: 100vh; max-width: 450px; display: flex; flex-direction: column; justify-content: space-between; padding: 12px; background: radial-gradient(circle, #1a4a32 0%, #091c13 100%); }
         
-        /* Header Mobile */
-        .game-header { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.5); padding: 10px 15px; border-radius: 12px; border: 1px solid rgba(255, 215, 0, 0.2); font-size: 0.9rem; }
+        .game-header { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.5); padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(255, 215, 0, 0.2); font-size: 0.85rem; }
         .valore { font-weight: 900; color: #ffd700; }
-
-        /* Area di Gioco */
-        .tavolo { flex: 1; display: flex; flex-direction: column; justify-content: space-between; margin: 15px 0; }
         
-        /* Avversario */
+        .btn-reset { background: #8b0000; color: #fff; border: 1px solid #ffd700; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.75rem; cursor: pointer; }
+
+        .tavolo { flex: 1; display: flex; flex-direction: column; justify-content: space-between; margin: 10px 0; }
+        
         .area-avversario { display: flex; justify-content: center; gap: 4px; min-height: 60px; }
         .carta-coperta { width: 40px; height: 60px; background: linear-gradient(135deg, #8b0000, #4a0000); border: 1px solid #ffd700; border-radius: 6px; }
 
-        /* Campo Centrale */
-        .area-centrale { display: flex; flex-direction: column; align-items: center; gap: 12px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .area-centrale { display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
         .campo-carte { display: flex; justify-content: center; align-items: center; gap: 20px; width: 100%; }
-        .slot-carta { width: 75px; height: 110px; border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 10px; display: flex; justify-content: center; align-items: center; }
+        .slot-carta { width: 70px; height: 100px; border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 10px; display: flex; justify-content: center; align-items: center; }
         
-        /* Carte */
-        .carta { width: 75px; height: 110px; background: #fff8eb; color: #1a1a1a; border-radius: 10px; border: 2px solid #ccc; display: flex; flex-direction: column; justify-content: space-between; padding: 6px; font-size: 0.85rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.1s; }
-        .carta.selezionata { transform: translateY(-15px); border-color: #ffd700; box-shadow: 0 0 15px #ffd700; }
+        .carta { width: 70px; height: 100px; background: #fff8eb; color: #1a1a1a; border-radius: 10px; border: 2px solid #ccc; display: flex; flex-direction: column; justify-content: space-between; padding: 6px; font-size: 0.85rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.1s; }
+        .carta.selezionata { transform: translateY(-12px); border-color: #ffd700; box-shadow: 0 0 15px #ffd700; }
         
-        /* Mia Mano */
-        .area-propria { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
-        .mano-scroll { width: 100%; overflow-x: auto; display: flex; gap: 8px; padding: 15px 5px 5px 5px; scrollbar-width: none; }
+        .area-propria { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; }
+        .mano-scroll { width: 100%; overflow-x: auto; display: flex; gap: 8px; padding: 10px 5px; scrollbar-width: none; }
         .mano-scroll::-webkit-scrollbar { display: none; }
 
-        /* Pulsante Gioca */
-        .btn-azione { background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%); color: #000; border: none; padding: 14px 0; font-weight: 900; border-radius: 25px; font-size: 1.1rem; width: 100%; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
-        .btn-azione:disabled { opacity: 0.3; box-shadow: none; }
+        .btn-azione { background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%); color: #000; border: none; padding: 12px 0; font-weight: 900; border-radius: 25px; font-size: 1rem; width: 100%; cursor: pointer; }
+        .btn-azione:disabled { opacity: 0.3; }
 
-        /* Modal Scelta Briscola */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: flex; justify-content: center; align-items: center; z-index: 100; }
         .modal.hidden { display: none; }
-        .modal-content { background: #163e2a; padding: 25px; border-radius: 20px; border: 2px solid #ffd700; text-align: center; width: 85%; max-width: 320px; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
-        .grid-semi { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
-        .btn-seme { padding: 15px 10px; font-weight: 900; border-radius: 12px; background: #25543a; color: #fff; border: 1px solid #ffd700; font-size: 1.05rem; cursor: pointer; }
+        .modal-content { background: #163e2a; padding: 20px; border-radius: 20px; border: 2px solid #ffd700; text-align: center; width: 85%; max-width: 300px; }
+        .grid-semi { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .btn-seme { padding: 12px 8px; font-weight: 900; border-radius: 10px; background: #25543a; color: #fff; border: 1px solid #ffd700; font-size: 0.95rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <!-- Modal Scelta Briscola -->
     <div id="modal-briscola" class="modal hidden">
         <div class="modal-content">
             <h2 style="color:#ffd700;">SCEGLI BRISCOLA</h2>
-            <p style="font-size:0.85rem; margin-top:5px; opacity:0.8;">Tocca il seme che vuoi impostare</p>
             <div class="grid-semi">
                 <button onclick="scegliBriscola('Denari')" class="btn-seme">♦ Denari</button>
                 <button onclick="scegliBriscola('Coppe')" class="btn-seme">🍷 Coppe</button>
@@ -69,13 +61,14 @@
         <header class="game-header">
             <div>Ruolo: <span id="mio-ruolo" class="valore">-</span></div>
             <div>Briscola: <span id="briscola-txt" class="valore">-</span></div>
+            <button onclick="resetStanza()" class="btn-reset">Reset</button>
         </header>
 
         <main class="tavolo">
             <div class="area-avversario" id="mano-avversario"></div>
 
             <div class="area-centrale">
-                <div style="font-size: 0.8rem; opacity: 0.8;">Carte nel mazzo: <span id="carte-mazzo" class="valore">0</span></div>
+                <div style="font-size: 0.8rem; opacity: 0.8;">Mazzo: <span id="carte-mazzo" class="valore">0</span></div>
                 <div class="campo-carte">
                     <div class="slot-carta" id="slot-g1"></div>
                     <div style="color:#ffd700; font-weight:900;">VS</div>
@@ -113,36 +106,34 @@
             document.getElementById('briscola-txt').textContent = stato.briscole || 'Scegli...';
             document.getElementById('carte-mazzo').textContent = stato.carte_rimaste_mazzo;
 
-            // Mostra popup briscola al giocatore di turno
-            const chiDeveScegliere = (stato.turni % 2 === 0) ? 1 : 2;
+            // Mostra la scelta della briscola a G1 se non è ancora scelta
             const modal = document.getElementById('modal-briscola');
-            if (!stato.briscole && mioRuolo === chiDeveScegliere) {
+            if (!stato.briscole && mioRuolo === 1) {
                 modal.classList.remove('hidden');
             } else {
                 modal.classList.add('hidden');
             }
 
-            // Render carte sul tavolo
             renderSlot('slot-g1', stato.carta1_in_tavola);
             renderSlot('slot-g2', stato.carta2_in_tavola);
 
-            // Render mia mano
             const miaMano = (mioRuolo === 1) ? stato.mano_g1 : stato.mano_g2;
             const containerProprio = document.getElementById('mano-propria');
             containerProprio.innerHTML = '';
 
-            miaMano.forEach(cartaStr => {
-                const card = creaElementoCarta(cartaStr);
-                if (cartaSelezionata === cartaStr) card.classList.add('selezionata');
-                card.onclick = () => {
-                    cartaSelezionata = (cartaSelezionata === cartaStr) ? null : cartaStr;
-                    renderizza(stato);
-                };
-                containerProprio.appendChild(card);
-            });
+            if (miaMano) {
+                miaMano.forEach(cartaStr => {
+                    const card = creaElementoCarta(cartaStr);
+                    if (cartaSelezionata === cartaStr) card.classList.add('selezionata');
+                    card.onclick = () => {
+                        cartaSelezionata = (cartaSelezionata === cartaStr) ? null : cartaStr;
+                        renderizza(stato);
+                    };
+                    containerProprio.appendChild(card);
+                });
+            }
 
-            // Render carte coperte avversario
-            const numAvversario = (mioRuolo === 1) ? stato.mano_g2.length : stato.mano_g1.length;
+            const numAvversario = (mioRuolo === 1) ? (stato.mano_g2 ? stato.mano_g2.length : 0) : (stato.mano_g1 ? stato.mano_g1.length : 0);
             const containerAvv = document.getElementById('mano-avversario');
             containerAvv.innerHTML = '';
             for (let i = 0; i < numAvversario; i++) {
@@ -151,7 +142,6 @@
                 containerAvv.appendChild(cop);
             }
 
-            // Attiva tasto GIOCA
             const eIlMioTurno = (stato.prio === mioRuolo);
             document.getElementById('btn-gioca').disabled = !cartaSelezionata || !eIlMioTurno || !stato.briscole;
         }
@@ -169,7 +159,7 @@
             const card = document.createElement('div');
             card.className = 'carta';
             const icona = { 'Denari': '♦', 'Coppe': '🍷', 'Spade': '⚔', 'Bastoni': '🪵' }[seme] || '';
-            card.innerHTML = `<div>${valore}</div><div style="text-align:center; font-size:1.5rem;">${icona}</div><div style="text-align:right; font-size:0.75rem;">${seme}</div>`;
+            card.innerHTML = `<div>${valore}</div><div style="text-align:center; font-size:1.4rem;">${icona}</div><div style="text-align:right; font-size:0.7rem;">${seme}</div>`;
             return card;
         }
 
@@ -192,7 +182,11 @@
             cartaSelezionata = null;
             aggiornaStato();
         }
+
+        async function resetStanza() {
+            await fetch('/api/reset', { method: 'POST' });
+            location.reload();
+        }
     </script>
 </body>
-</html>
 </html>
