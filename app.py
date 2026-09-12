@@ -1,34 +1,34 @@
 from flask import Flask, render_template, jsonify, request
-from game_logic import Partita # Importa la classe principale della tua logica
+from game_logic import PartitaBriscola
 
 app = Flask(__name__)
-
-# Creiamo un'istanza della partita
-partita = Partita()
+partita = PartitaBriscola()
 
 @app.route("/")
 def home():
-    # Carica l'interfaccia principale (templates/index.html)
     return render_template("index.html")
 
 @app.route("/api/stato", methods=["GET"])
 def get_stato():
-    # Restituisce lo stato corrente della partita in formato JSON
     return jsonify(partita.to_dict())
 
-@app.route("/api/gioca-carta", methods=["POST"])
-def gioca_carta():
-    data = request.json
-    indice = data.get("indice_carta")
+@app.route("/api/scegli-briscola", methods=["POST"])
+def scegli_briscola():
+    seme = request.json.get("seme")
+    partita.imposta_briscola(seme)
+    return jsonify(partita.to_dict())
+
+@app.route("/api/gioca-turno", methods=["POST"])
+def gioca_turno():
+    c1 = request.json.get("carta1")
+    c2 = request.json.get("carta2")
+    partita.gioca_turno(c1, c2)
     
-    # Esegue la mossa usando la tua logica
-    esito, messaggio = partita.giocatore_corrente.gioca_carta(indice)
-    
-    return jsonify({
-        "successo": esito,
-        "messaggio": messaggio,
-        "stato": partita.to_dict()
-    })
+    if partita.fase == "FINITA":
+        p1, p2 = partita.calcola_punteggio_finale()
+        return jsonify({"stato": partita.to_dict(), "punti_g1": p1, "punti_g2": p2})
+        
+    return jsonify(partita.to_dict())
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
