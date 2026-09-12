@@ -44,5 +44,18 @@ def gioca_carta():
     dati["mio_ruolo"] = ruolo
     return jsonify(dati)
 
+@app.route("/api/reset", methods=["POST"])
+def reset():
+    """Azzera la partita e i giocatori connessi"""
+    session.clear()
+    partita.giocatori_connessi = 0
+    partita.reset_partita()
+    return jsonify({"status": "ok"})
+
+if __name__ == "__main__":
+    app.run()
+    dati["mio_ruolo"] = ruolo
+    return jsonify(dati)
+
 if __name__ == "__main__":
     app.run()
