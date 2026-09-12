@@ -1,0 +1,105 @@
+html_content = """<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gioco di Carte - Briscola</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Overlay per Scelta Briscola -->
+    <div id="modal-briscola" class="modal">
+        <div class="modal-content">
+            <h2>Scegli il Seme di Briscola</h2>
+            <p>Seleziona il seme dominante per questa partita:</p>
+            <div class="semi-buttons">
+                <button onclick="scegliBriscola('Denari')" class="btn-seme denari">♦ Denari</button>
+                <button onclick="scegliBriscola('Coppe')" class="btn-seme coppe">🍷 Coppe</button>
+                <button onclick="scegliBriscola('Spade')" class="btn-seme spade">⚔ Spade</button>
+                <button onclick="scegliBriscola('Bastoni')" class="btn-seme bastoni">🪵 Bastoni</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Fine Partita -->
+    <div id="modal-fine" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="esito-titolo">Partita Terminata!</h2>
+            <div id="esito-punteggio" class="punteggio-box"></div>
+            <button onclick="nuovaPartita()" class="btn-azione">Gioca un'altra partita</button>
+        </div>
+    </div>
+
+    <div class="game-container">
+        
+        <!-- Header con Informazioni di Gioco -->
+        <header class="game-header">
+            <div class="info-badge">
+                <span class="label">Briscola:</span>
+                <span id="briscola-attuale" class="valore">Non Scelta</span>
+            </div>
+            <h1>Briscola Web</h1>
+            <div class="info-badge">
+                <span class="label">Turno:</span>
+                <span id="turno-attuale" class="valore">Giocatore 1</span>
+            </div>
+        </header>
+
+        <!-- Tavolo da Gioco principali -->
+        <main class="tavolo">
+            
+            <!-- Zona Giocatore 2 (In Alto) -->
+            <section class="area-giocatore top">
+                <div class="player-info">
+                    <h3>Giocatore 2</h3>
+                    <span id="status-g2" class="status-badge">In attesa...</span>
+                </div>
+                <div id="mano-g2" class="mano-carte carte-coperte">
+                    <!-- Le carte del G2 verranno inserite qui -->
+                </div>
+            </section>
+
+            <!-- Centro Tavolo / Campo di Battaglia -->
+            <section class="area-centrale">
+                <div class="mazzo-container">
+                    <div class="carta-mazzo">
+                        <span id="carte-rimaste">20</span>
+                        <small>Carte</small>
+                    </div>
+                </div>
+
+                <div class="campo-gioco">
+                    <div class="slot-carta" id="slot-g1">
+                        <span class="placeholder-text">Carta G1</span>
+                    </div>
+                    <div class="vs-badge">VS</div>
+                    <div class="slot-carta" id="slot-g2">
+                        <span class="placeholder-text">Carta G2</span>
+                    </div>
+                </div>
+
+                <div class="pannello-azioni">
+                    <button id="btn-conferma-turno" onclick="inviaGiocata()" class="btn-azione" disabled>Gioca Turno</button>
+                </div>
+            </section>
+
+            <!-- Zona Giocatore 1 (In Basso) -->
+            <section class="area-giocatore bottom">
+                <div class="player-info">
+                    <h3>Giocatore 1 (Tu)</h3>
+                    <span id="status-g1" class="status-badge attivo">Il tuo turno</span>
+                </div>
+                <div id="mano-g1" class="mano-carte">
+                    <!-- Le carte del G1 verranno inserite qui -->
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
+"""
