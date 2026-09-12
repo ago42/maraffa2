@@ -4,48 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mareaffa in 2</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
     
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Nunito', sans-serif; background: #0d2818; color: #f0f4f1; height: 100vh; overflow: hidden; display: flex; justify-content: center; }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Nunito', sans-serif; background: #0f2b1d; color: #fff; height: 100vh; overflow: hidden; display: flex; justify-content: center; }
         
-        .game-container { width: 100vw; height: 100vh; max-width: 500px; display: flex; flex-direction: column; justify-content: space-between; padding: 10px; background: radial-gradient(circle, #1a472a 0%, #0d2818 100%); }
+        .game-container { width: 100vw; height: 100vh; max-width: 450px; display: flex; flex-direction: column; justify-content: space-between; padding: 12px; background: radial-gradient(circle, #1a4a32 0%, #091c13 100%); }
         
-        /* Header compatto per mobile */
-        .game-header { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.4); padding: 8px 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.85rem; }
-        .game-header h1 { font-family: 'Cinzel', serif; font-size: 1.1rem; color: #dfb15b; }
-        .valore { font-weight: bold; color: #dfb15b; }
+        /* Header Mobile */
+        .game-header { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.5); padding: 10px 15px; border-radius: 12px; border: 1px solid rgba(255, 215, 0, 0.2); font-size: 0.9rem; }
+        .valore { font-weight: 900; color: #ffd700; }
 
-        /* Tavolo e Campo da Gioco */
-        .tavolo { flex: 1; display: flex; flex-direction: column; justify-content: space-between; margin: 10px 0; }
+        /* Area di Gioco */
+        .tavolo { flex: 1; display: flex; flex-direction: column; justify-content: space-between; margin: 15px 0; }
         
-        .area-avversario { display: flex; justify-content: center; gap: 4px; min-height: 70px; }
-        .carta-coperta { width: 45px; height: 65px; background: linear-gradient(135deg, #8b0000, #5c0000); border: 1px solid #dfb15b; border-radius: 5px; }
+        /* Avversario */
+        .area-avversario { display: flex; justify-content: center; gap: 4px; min-height: 60px; }
+        .carta-coperta { width: 40px; height: 60px; background: linear-gradient(135deg, #8b0000, #4a0000); border: 1px solid #ffd700; border-radius: 6px; }
 
-        .area-centrale { display: flex; flex-direction: column; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 15px; }
-        .campo-carte { display: flex; justify-content: center; align-items: center; gap: 15px; width: 100%; }
-        .slot-carta { width: 65px; height: 95px; border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 8px; display: flex; justify-content: center; align-items: center; }
+        /* Campo Centrale */
+        .area-centrale { display: flex; flex-direction: column; align-items: center; gap: 12px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .campo-carte { display: flex; justify-content: center; align-items: center; gap: 20px; width: 100%; }
+        .slot-carta { width: 75px; height: 110px; border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 10px; display: flex; justify-content: center; align-items: center; }
         
         /* Carte */
-        .carta { width: 65px; height: 95px; background: #fdfbf7; color: #1a1a1a; border-radius: 8px; border: 2px solid #ccc; display: flex; flex-direction: column; justify-content: space-between; padding: 4px; font-size: 0.75rem; font-weight: bold; cursor: pointer; transition: transform 0.15s; }
-        .carta.selezionata { transform: translateY(-12px); border-color: #dfb15b; box-shadow: 0 0 10px #dfb15b; }
+        .carta { width: 75px; height: 110px; background: #fff8eb; color: #1a1a1a; border-radius: 10px; border: 2px solid #ccc; display: flex; flex-direction: column; justify-content: space-between; padding: 6px; font-size: 0.85rem; font-weight: 900; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.1s; }
+        .carta.selezionata { transform: translateY(-15px); border-color: #ffd700; box-shadow: 0 0 15px #ffd700; }
         
-        /* La mia mano - Scroll orizzontale per schermi piccoli */
-        .area-propria { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .mano-scroll { width: 100%; overflow-x: auto; display: flex; gap: 6px; padding: 10px 5px; scrollbar-width: none; }
+        /* Mia Mano */
+        .area-propria { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+        .mano-scroll { width: 100%; overflow-x: auto; display: flex; gap: 8px; padding: 15px 5px 5px 5px; scrollbar-width: none; }
         .mano-scroll::-webkit-scrollbar { display: none; }
 
-        /* Pulsanti */
-        .btn-azione { background: linear-gradient(180deg, #dfb15b 0%, #b8860b 100%); color: #1a1a1a; border: none; padding: 10px 20px; font-weight: 800; border-radius: 20px; font-size: 0.95rem; width: 80%; cursor: pointer; }
-        .btn-azione:disabled { opacity: 0.4; cursor: not-allowed; }
+        /* Pulsante Gioca */
+        .btn-azione { background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%); color: #000; border: none; padding: 14px 0; font-weight: 900; border-radius: 25px; font-size: 1.1rem; width: 100%; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
+        .btn-azione:disabled { opacity: 0.3; box-shadow: none; }
 
         /* Modal Scelta Briscola */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 100; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: flex; justify-content: center; align-items: center; z-index: 100; }
         .modal.hidden { display: none; }
-        .modal-content { background: #1e3a29; padding: 20px; border-radius: 15px; border: 2px solid #dfb15b; text-align: center; width: 85%; max-width: 320px; }
-        .grid-semi { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .btn-seme { padding: 12px; font-weight: bold; border-radius: 8px; background: #2e543c; color: #fff; border: 1px solid rgba(255,255,255,0.2); font-size: 1rem; }
+        .modal-content { background: #163e2a; padding: 25px; border-radius: 20px; border: 2px solid #ffd700; text-align: center; width: 85%; max-width: 320px; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
+        .grid-semi { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+        .btn-seme { padding: 15px 10px; font-weight: 900; border-radius: 12px; background: #25543a; color: #fff; border: 1px solid #ffd700; font-size: 1.05rem; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -53,7 +54,8 @@
     <!-- Modal Scelta Briscola -->
     <div id="modal-briscola" class="modal hidden">
         <div class="modal-content">
-            <h3>Scegli le Briscole</h3>
+            <h2 style="color:#ffd700;">SCEGLI BRISCOLA</h2>
+            <p style="font-size:0.85rem; margin-top:5px; opacity:0.8;">Tocca il seme che vuoi impostare</p>
             <div class="grid-semi">
                 <button onclick="scegliBriscola('Denari')" class="btn-seme">♦ Denari</button>
                 <button onclick="scegliBriscola('Coppe')" class="btn-seme">🍷 Coppe</button>
@@ -66,28 +68,24 @@
     <div class="game-container">
         <header class="game-header">
             <div>Ruolo: <span id="mio-ruolo" class="valore">-</span></div>
-            <h1>Mareaffa</h1>
             <div>Briscola: <span id="briscola-txt" class="valore">-</span></div>
         </header>
 
         <main class="tavolo">
-            <!-- Avversario -->
             <div class="area-avversario" id="mano-avversario"></div>
 
-            <!-- Centro Tavolo -->
             <div class="area-centrale">
-                <div style="font-size: 0.8rem; opacity: 0.8;">Mazzo: <span id="carte-mazzo" class="valore">0</span> carte</div>
+                <div style="font-size: 0.8rem; opacity: 0.8;">Carte nel mazzo: <span id="carte-mazzo" class="valore">0</span></div>
                 <div class="campo-carte">
                     <div class="slot-carta" id="slot-g1"></div>
-                    <div style="color:#dfb15b; font-weight:bold;">VS</div>
+                    <div style="color:#ffd700; font-weight:900;">VS</div>
                     <div class="slot-carta" id="slot-g2"></div>
                 </div>
-                <button id="btn-gioca" onclick="inviaCarta()" class="btn-azione" disabled>GIOCA CARTA</button>
             </div>
 
-            <!-- Mia Mano -->
             <div class="area-propria">
                 <div class="mano-scroll" id="mano-propria"></div>
+                <button id="btn-gioca" onclick="inviaCarta()" class="btn-azione" disabled>GIOCA CARTA</button>
             </div>
         </main>
     </div>
@@ -112,10 +110,10 @@
 
         function renderizza(stato) {
             document.getElementById('mio-ruolo').textContent = mioRuolo ? `G${mioRuolo}` : 'Spettatore';
-            document.getElementById('briscola-txt').textContent = stato.briscole || 'Da scegliere';
+            document.getElementById('briscola-txt').textContent = stato.briscole || 'Scegli...';
             document.getElementById('carte-mazzo').textContent = stato.carte_rimaste_mazzo;
 
-            // Gestione del turno per scegliere la briscola (alternato a ogni partita)
+            // Mostra popup briscola al giocatore di turno
             const chiDeveScegliere = (stato.turni % 2 === 0) ? 1 : 2;
             const modal = document.getElementById('modal-briscola');
             if (!stato.briscole && mioRuolo === chiDeveScegliere) {
@@ -124,11 +122,11 @@
                 modal.classList.add('hidden');
             }
 
-            // Renderizza le carte in tavola
+            // Render carte sul tavolo
             renderSlot('slot-g1', stato.carta1_in_tavola);
             renderSlot('slot-g2', stato.carta2_in_tavola);
 
-            // Renderizza la mano del giocatore
+            // Render mia mano
             const miaMano = (mioRuolo === 1) ? stato.mano_g1 : stato.mano_g2;
             const containerProprio = document.getElementById('mano-propria');
             containerProprio.innerHTML = '';
@@ -143,7 +141,7 @@
                 containerProprio.appendChild(card);
             });
 
-            // Renderizza le carte coperte dell'avversario
+            // Render carte coperte avversario
             const numAvversario = (mioRuolo === 1) ? stato.mano_g2.length : stato.mano_g1.length;
             const containerAvv = document.getElementById('mano-avversario');
             containerAvv.innerHTML = '';
@@ -153,7 +151,7 @@
                 containerAvv.appendChild(cop);
             }
 
-            // Abilita pulsante gioca solo se è il tuo turno e hai selezionato una carta
+            // Attiva tasto GIOCA
             const eIlMioTurno = (stato.prio === mioRuolo);
             document.getElementById('btn-gioca').disabled = !cartaSelezionata || !eIlMioTurno || !stato.briscole;
         }
@@ -161,9 +159,7 @@
         function renderSlot(idSlot, cartaStr) {
             const slot = document.getElementById(idSlot);
             slot.innerHTML = '';
-            if (cartaStr) {
-                slot.appendChild(creaElementoCarta(cartaStr));
-            }
+            if (cartaStr) slot.appendChild(creaElementoCarta(cartaStr));
         }
 
         function creaElementoCarta(cartaStr) {
@@ -173,7 +169,7 @@
             const card = document.createElement('div');
             card.className = 'carta';
             const icona = { 'Denari': '♦', 'Coppe': '🍷', 'Spade': '⚔', 'Bastoni': '🪵' }[seme] || '';
-            card.innerHTML = `<div>${valore}</div><div style="text-align:center; font-size:1.2rem;">${icona}</div><div style="text-align:right;">${seme[0]}</div>`;
+            card.innerHTML = `<div>${valore}</div><div style="text-align:center; font-size:1.5rem;">${icona}</div><div style="text-align:right; font-size:0.75rem;">${seme}</div>`;
             return card;
         }
 
@@ -199,9 +195,4 @@
     </script>
 </body>
 </html>
-            cartaSelezionata = null;
-            aggiornaStato();
-        }
-    </script>
-</body>
 </html>
