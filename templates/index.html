@@ -3,62 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mareaffa in 2</title>
+    <title>Mareaffa Romagnola in 2</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Nunito', sans-serif; background: #0f2b1d; color: #fff; height: 100vh; height: 100dvh; overflow: hidden; display: flex; justify-content: center; }
+        html, body { width: 100%; height: 100%; overflow: hidden; }
+        body { font-family: 'Nunito', sans-serif; background: #0c2317; color: #fff; display: flex; justify-content: center; align-items: center; }
         
-        .game-container { width: 100vw; height: 100vh; height: 100dvh; max-width: 450px; display: flex; flex-direction: column; justify-content: space-between; padding: 8px; background: radial-gradient(circle, #1a4a32 0%, #091c13 100%); }
+        .game-container { width: 100vw; height: 100dvh; max-width: 420px; display: flex; flex-direction: column; justify-content: space-between; padding: 8px; background: radial-gradient(circle, #153e2a 0%, #07150e 100%); position: relative; }
         
         /* Header compatto */
-        .game-header { display: flex; flex-direction: column; gap: 4px; background: rgba(0, 0, 0, 0.5); padding: 6px 10px; border-radius: 10px; border: 1px solid rgba(255, 215, 0, 0.2); font-size: 0.8rem; }
+        .game-header { display: flex; flex-direction: column; gap: 2px; background: rgba(0, 0, 0, 0.5); padding: 6px 10px; border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.3); font-size: 0.75rem; width: 100%; }
         .header-row { display: flex; justify-content: space-between; align-items: center; }
         .valore { font-weight: 900; color: #ffd700; }
         
-        .btn-reset { background: #8b0000; color: #fff; border: 1px solid #ffd700; padding: 3px 6px; border-radius: 5px; font-weight: bold; font-size: 0.7rem; cursor: pointer; }
+        .btn-reset { background: #8b0000; color: #fff; border: 1px solid #ffd700; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 0.65rem; cursor: pointer; }
 
-        /* Area di gioco ridimensionata per mobile */
-        .tavolo { flex: 1; display: flex; flex-direction: column; justify-content: space-between; margin: 5px 0; }
+        /* Tavolo centrato */
+        .tavolo { flex: 1; display: flex; flex-direction: column; justify-content: space-around; align-items: center; width: 100%; margin: 2px 0; }
         
-        .area-avversario { display: flex; justify-content: center; gap: 2px; min-height: 45px; }
-        .carta-coperta { width: 30px; height: 45px; background: linear-gradient(135deg, #8b0000, #4a0000); border: 1px solid #ffd700; border-radius: 4px; }
+        .area-avversario { display: flex; justify-content: center; align-items: center; width: 100%; height: 35px; }
+        .carte-avversario-wrap { display: flex; justify-content: center; width: 100%; }
+        
+        /* Dorso carta Romagnolo (Pattern a rombi classici) */
+        .carta-coperta { 
+            width: 24px; 
+            height: 36px; 
+            background: repeating-linear-gradient(45deg, #a82424, #a82424 4px, #1a5e38 4px, #1a5e38 8px); 
+            border: 1px solid #ffd700; 
+            border-radius: 3px; 
+            margin: 0 -2px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
 
-        .area-centrale { display: flex; flex-direction: column; align-items: center; gap: 6px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .campo-carte { display: flex; justify-content: center; align-items: center; gap: 15px; width: 100%; }
-        .slot-carta { width: 55px; height: 80px; border: 2px dashed rgba(255, 255, 255, 0.2); border-radius: 8px; display: flex; justify-content: center; align-items: center; }
+        .area-centrale { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: rgba(0,0,0,0.35); padding: 6px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); width: 100%; }
+        .campo-carte { display: flex; justify-content: center; align-items: center; gap: 12px; width: 100%; }
+        .slot-carta { width: 52px; height: 76px; border: 2px dashed rgba(255, 215, 0, 0.25); border-radius: 6px; display: flex; justify-content: center; align-items: center; }
         
-        /* Carte più compatte */
-        .carta { width: 55px; height: 80px; background: #fff8eb; color: #1a1a1a; border-radius: 8px; border: 2px solid #ccc; display: flex; flex-direction: column; justify-content: space-between; padding: 4px; font-size: 0.75rem; font-weight: 900; cursor: pointer; box-shadow: 0 3px 5px rgba(0,0,0,0.3); transition: transform 0.1s; flex-shrink: 0; }
-        .carta.selezionata { transform: translateY(-10px); border-color: #ffd700; box-shadow: 0 0 12px #ffd700; }
+        /* Carte stile Romagnolo */
+        .area-propria { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 6px; }
+        .mano-container { display: flex; justify-content: center; align-items: flex-end; width: 100%; height: 88px; padding-top: 15px; }
         
-        .area-propria { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; }
-        .mano-scroll { width: 100%; overflow-x: auto; display: flex; gap: 6px; padding: 12px 2px 4px 2px; scrollbar-width: none; }
-        .mano-scroll::-webkit-scrollbar { display: none; }
+        .carta { 
+            width: 50px; 
+            height: 74px; 
+            background: #fdfaf2; 
+            border-radius: 6px; 
+            border: 1.5px solid #222; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            padding: 3px; 
+            font-size: 0.65rem; 
+            font-weight: 900; 
+            cursor: pointer; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5); 
+            transition: transform 0.15s ease, margin 0.15s ease; 
+            flex-shrink: 1; 
+            position: relative;
+        }
 
-        .btn-azione { background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%); color: #000; border: none; padding: 10px 0; font-weight: 900; border-radius: 20px; font-size: 0.95rem; width: 100%; cursor: pointer; }
+        /* Colori e stili specifici dei semi Romagnoli */
+        .carta.seme-Denari { color: #b8860b; border-color: #d4af37; background: #fffdf5; }
+        .carta.seme-Coppe { color: #b81d13; border-color: #b81d13; background: #fffafa; }
+        .carta.seme-Spade { color: #1c3b57; border-color: #1c3b57; background: #f8fafd; }
+        .carta.seme-Bastoni { color: #2e5a1c; border-color: #2e5a1c; background: #f7fbf6; }
+
+        .mano-container .carta { margin: 0 -3px; }
+        .carta.selezionata { transform: translateY(-12px); border-color: #ffd700 !important; box-shadow: 0 0 12px #ffd700; z-index: 10; }
+        
+        .btn-azione { background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%); color: #000; border: none; padding: 8px 0; font-weight: 900; border-radius: 16px; font-size: 0.85rem; width: 100%; cursor: pointer; }
         .btn-azione:disabled { opacity: 0.3; }
 
-        /* Modal Scelta Briscola NON coprente (permette di vedere la propria mano) */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); display: flex; justify-content: center; align-items: flex-start; padding-top: 50px; z-index: 100; pointer-events: auto; }
+        /* Modal Scelta Briscola */
+        .modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: flex-start; padding-top: 40px; z-index: 100; }
         .modal.hidden { display: none; }
-        .modal-content { background: rgba(22, 62, 42, 0.95); padding: 12px; border-radius: 15px; border: 2px solid #ffd700; text-align: center; width: 90%; max-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.8); }
-        .grid-semi { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
-        .btn-seme { padding: 8px 4px; font-weight: 900; border-radius: 8px; background: #25543a; color: #fff; border: 1px solid #ffd700; font-size: 0.85rem; cursor: pointer; }
+        .modal-content { background: rgba(18, 48, 33, 0.96); padding: 10px; border-radius: 12px; border: 2px solid #ffd700; text-align: center; width: 88%; max-width: 300px; box-shadow: 0 8px 20px rgba(0,0,0,0.8); }
+        .grid-semi { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
+        .btn-seme { padding: 8px 2px; font-weight: 900; border-radius: 6px; background: #1c452e; color: #fff; border: 1px solid #ffd700; font-size: 0.8rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div id="modal-briscola" class="modal hidden">
         <div class="modal-content">
-            <h3 style="color:#ffd700; font-size: 1rem;">SCEGLI BRISCOLA</h3>
-            <p style="font-size: 0.75rem; opacity: 0.8;">Guarda le tue carte sotto prima di scegliere</p>
+            <h3 style="color:#ffd700; font-size: 0.9rem;">SCEGLI BRISCOLA</h3>
+            <p style="font-size: 0.7rem; opacity: 0.8;">Guarda le tue carte sotto prima di scegliere</p>
             <div class="grid-semi">
-                <button onclick="scegliBriscola('Denari')" class="btn-seme">♦ Denari</button>
-                <button onclick="scegliBriscola('Coppe')" class="btn-seme">🍷 Coppe</button>
-                <button onclick="scegliBriscola('Spade')" class="btn-seme">⚔ Spade</button>
-                <button onclick="scegliBriscola('Bastoni')" class="btn-seme">🪵 Bastoni</button>
+                <button onclick="scegliBriscola('Denari')" class="btn-seme" style="color:#ffd700;">🟡 Denari</button>
+                <button onclick="scegliBriscola('Coppe')" class="btn-seme" style="color:#ff6b6b;">🏆 Coppe</button>
+                <button onclick="scegliBriscola('Spade')" class="btn-seme" style="color:#74c0fc;">⚔ Spade</button>
+                <button onclick="scegliBriscola('Bastoni')" class="btn-seme" style="color:#63e6be;">🪵 Bastoni</button>
             </div>
         </div>
     </div>
@@ -70,26 +106,28 @@
                 <div>Briscola: <span id="briscola-txt" class="valore">-</span></div>
                 <button onclick="resetStanza()" class="btn-reset">Reset</button>
             </div>
-            <div class="header-row" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 3px;">
+            <div class="header-row" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2px; margin-top: 2px;">
                 <div>Partita: <span id="punti-partita" class="valore">0 - 0</span></div>
                 <div>Totale: <span id="punti-totali" class="valore">0 - 0</span></div>
             </div>
         </header>
 
         <main class="tavolo">
-            <div class="area-avversario" id="mano-avversario"></div>
+            <div class="area-avversario">
+                <div class="carte-avversario-wrap" id="mano-avversario"></div>
+            </div>
 
             <div class="area-centrale">
-                <div style="font-size: 0.75rem; opacity: 0.8;">Mazzo: <span id="carte-mazzo" class="valore">0</span></div>
+                <div style="font-size: 0.7rem; opacity: 0.8;">Mazzo: <span id="carte-mazzo" class="valore">0</span></div>
                 <div class="campo-carte">
                     <div class="slot-carta" id="slot-g1"></div>
-                    <div style="color:#ffd700; font-weight:900; font-size:0.8rem;">VS</div>
+                    <div style="color:#ffd700; font-weight:900; font-size:0.75rem;">VS</div>
                     <div class="slot-carta" id="slot-g2"></div>
                 </div>
             </div>
 
             <div class="area-propria">
-                <div class="mano-scroll" id="mano-propria"></div>
+                <div class="mano-container" id="mano-propria"></div>
                 <button id="btn-gioca" onclick="inviaCarta()" class="btn-azione" disabled>GIOCA CARTA</button>
             </div>
         </main>
@@ -118,7 +156,6 @@
             document.getElementById('briscola-txt').textContent = stato.briscole || 'Scegli...';
             document.getElementById('carte-mazzo').textContent = stato.carte_rimaste_mazzo;
 
-            // Aggiornamento Punteggi
             document.getElementById('punti-partita').textContent = `${stato.punti_g1 || 0} - ${stato.punti_g2 || 0}`;
             document.getElementById('punti-totali').textContent = `${stato.sommatot1 || 0} - ${stato.sommatot2 || 0}`;
 
@@ -173,9 +210,16 @@
             const seme = parts[0];
             const valore = parts[1];
             const card = document.createElement('div');
-            card.className = 'carta';
-            const icona = { 'Denari': '♦', 'Coppe': '🍷', 'Spade': '⚔', 'Bastoni': '🪵' }[seme] || '';
-            card.innerHTML = `<div>${valore}</div><div style="text-align:center; font-size:1.1rem;">${icona}</div><div style="text-align:right; font-size:0.65rem;">${seme}</div>`;
+            card.className = `carta seme-${seme}`;
+            
+            // Simboli tradizionali romagnoli
+            const icona = { 'Denari': '🟡', 'Coppe': '🏆', 'Spade': '⚔', 'Bastoni': '🪵' }[seme] || '';
+            
+            card.innerHTML = `
+                <div>${valore}</div>
+                <div style="text-align:center; font-size:1.1rem; margin: 2px 0;">${icona}</div>
+                <div style="text-align:right; font-size:0.55rem; font-weight:900;">${seme}</div>
+            `;
             return card;
         }
 
