@@ -1,23 +1,34 @@
+import uuid
 from flask import Flask, jsonify, render_template, request, session
 from game_logic import PartitaBriscola
 
 app = Flask(__name__)
-app.secret_key = "chiave_segreta_briscola_multiplayer"
+app.secret_key = "chiave_segreta_briscola_multiplayer_romagnola"
 
 partita = PartitaBriscola()
+
+# Tracciamento dei giocatori tramite ID univoco anziché semplice contatore
+giocatori_attivi = {"G1": None, "G2": None}
 
 
 @app.route("/")
 def home():
-  if "ruolo" not in session:
-    if partita.giocatori_connessi == 0:
+  # Assegna un ID univoco a ogni nuovo dispositivo/browser
+  if "user_id" not in session:
+    session["user_id"] = str(uuid.uuid4())
+
+  user_id = session["user_id"]
+
+  # Se l'utente non ha ancora un ruolo, assegnalo in base ai posti liberi
+  if "ruolo" not in session or session["ruolo"] == 0:
+    if giocatori_attivi["G1"] is None or giocatori_attivi["G1"] == user_id:
+      giocatori_attivi["G1"] = user_id
       session["ruolo"] = 1
-      partita.giocatori_connessi += 1
-    elif partita.giocatori_connessi == 1:
+    elif giocatori_attivi["G2"] is None or giocatori_attivi["G2"] == user_id:
+      giocatori_attivi["G2"] = user_id
       session["ruolo"] = 2
-      partita.giocatori_connessi += 1
     else:
-      session["ruolo"] = 0
+      session["ruolo"] = 0  # Spettatore se la stanza è piena
 
   return render_template("index.html")
 
@@ -51,9 +62,16 @@ def gioca_carta():
 
 @app.route("/api/reset", methods=["POST"])
 def reset():
+  global giocatori_attivi
   session.clear()
+  giocatori_attivi = {"G1": None, "G2": None}
   partita.giocatori_connessi = 0
   partita.reset_partita()
+  return jsonify({"status": "ok"})
+
+
+if __name__ == "__main__":
+  app.run()
   return jsonify({"status": "ok"})
 
 
