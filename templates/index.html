@@ -13,20 +13,17 @@
         
         .game-container { width: 100vw; height: 100dvh; max-width: 420px; display: flex; flex-direction: column; justify-content: space-between; padding: 8px; background: radial-gradient(circle, #153e2a 0%, #07150e 100%); position: relative; }
         
-        /* Header compatto */
         .game-header { display: flex; flex-direction: column; gap: 2px; background: rgba(0, 0, 0, 0.5); padding: 6px 10px; border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.3); font-size: 0.75rem; width: 100%; }
         .header-row { display: flex; justify-content: space-between; align-items: center; }
         .valore { font-weight: 900; color: #ffd700; }
         
         .btn-reset { background: #8b0000; color: #fff; border: 1px solid #ffd700; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 0.65rem; cursor: pointer; }
 
-        /* Tavolo centrato */
         .tavolo { flex: 1; display: flex; flex-direction: column; justify-content: space-around; align-items: center; width: 100%; margin: 2px 0; }
         
         .area-avversario { display: flex; justify-content: center; align-items: center; width: 100%; height: 35px; }
         .carte-avversario-wrap { display: flex; justify-content: center; width: 100%; }
         
-        /* Dorso carta Romagnolo (Pattern a rombi classici) */
         .carta-coperta { 
             width: 24px; 
             height: 36px; 
@@ -41,7 +38,6 @@
         .campo-carte { display: flex; justify-content: center; align-items: center; gap: 12px; width: 100%; }
         .slot-carta { width: 52px; height: 76px; border: 2px dashed rgba(255, 215, 0, 0.25); border-radius: 6px; display: flex; justify-content: center; align-items: center; }
         
-        /* Carte stile Romagnolo */
         .area-propria { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 6px; }
         .mano-container { display: flex; justify-content: center; align-items: flex-end; width: 100%; height: 88px; padding-top: 15px; }
         
@@ -64,7 +60,6 @@
             position: relative;
         }
 
-        /* Colori e stili specifici dei semi Romagnoli */
         .carta.seme-Denari { color: #b8860b; border-color: #d4af37; background: #fffdf5; }
         .carta.seme-Coppe { color: #b81d13; border-color: #b81d13; background: #fffafa; }
         .carta.seme-Spade { color: #1c3b57; border-color: #1c3b57; background: #f8fafd; }
@@ -76,7 +71,6 @@
         .btn-azione { background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%); color: #000; border: none; padding: 8px 0; font-weight: 900; border-radius: 16px; font-size: 0.85rem; width: 100%; cursor: pointer; }
         .btn-azione:disabled { opacity: 0.3; }
 
-        /* Modal Scelta Briscola */
         .modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: flex-start; padding-top: 40px; z-index: 100; }
         .modal.hidden { display: none; }
         .modal-content { background: rgba(18, 48, 33, 0.96); padding: 10px; border-radius: 12px; border: 2px solid #ffd700; text-align: center; width: 88%; max-width: 300px; box-shadow: 0 8px 20px rgba(0,0,0,0.8); }
@@ -174,13 +168,29 @@
             const containerProprio = document.getElementById('mano-propria');
             containerProprio.innerHTML = '';
 
+            // Calcolo corretto del turno:
+            // Il giocatore di turno deve giocare per primo, OPPURE se l'altro ha già messo la carta, spetta a chi deve rispondere.
+            let eIlMioTurno = false;
+            if (stato.briscole) {
+                if (mioRuolo === 1) {
+                    eIlMioTurno = (stato.prio === 1 && !stato.carta1_in_tavola) || (stato.prio === 2 && stato.carta2_in_tavola && !stato.carta1_in_tavola);
+                } else if (mioRuolo === 2) {
+                    eIlMioTurno = (stato.prio === 2 && !stato.carta2_in_tavola) || (stato.prio === 1 && stato.carta1_in_tavola && !stato.carta2_in_tavola);
+                }
+            }
+
             if (miaMano) {
                 miaMano.forEach(cartaStr => {
                     const card = creaElementoCarta(cartaStr);
                     if (cartaSelezionata === cartaStr) card.classList.add('selezionata');
+                    
                     card.onclick = () => {
-                        cartaSelezionata = (cartaSelezionata === cartaStr) ? null : cartaStr;
-                        renderizza(stato);
+                        if (cartaSelezionata === cartaStr && eIlMioTurno) {
+                            inviaCarta();
+                        } else {
+                            cartaSelezionata = cartaStr;
+                            renderizza(stato);
+                        }
                     };
                     containerProprio.appendChild(card);
                 });
@@ -195,8 +205,7 @@
                 containerAvv.appendChild(cop);
             }
 
-            const eIlMioTurno = (stato.prio === mioRuolo);
-            document.getElementById('btn-gioca').disabled = !cartaSelezionata || !eIlMioTurno || !stato.briscole;
+            document.getElementById('btn-gioca').disabled = !cartaSelezionata || !eIlMioTurno;
         }
 
         function renderSlot(idSlot, cartaStr) {
@@ -212,7 +221,6 @@
             const card = document.createElement('div');
             card.className = `carta seme-${seme}`;
             
-            // Simboli tradizionali romagnoli
             const icona = { 'Denari': '🟡', 'Coppe': '🏆', 'Spade': '⚔', 'Bastoni': '🪵' }[seme] || '';
             
             card.innerHTML = `
