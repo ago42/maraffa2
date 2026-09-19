@@ -123,8 +123,10 @@ class PartitaBriscola:
     self.fase = "IN_CORSO"
 
   def imposta_briscola(self, seme):
-    self.briscole = seme
-
+      self.briscole = seme
+      # Chi deve scegliere la briscola (G1 nei turni pari, G2 nei dispari) gioca anche per primo
+      chi_ha_scelto = 1 if (self.turni % 2 == 0) else 2
+      self.prio = chi_ha_scelto
   def gioca_carta_singola(self, num_giocatore, carta):
     if self.fase == "FINITA":
       return
